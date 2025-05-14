@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - SEACOR_LLM_PROVIDER=monica
+      - SEACOR_LLM_MODEL=gpt-4o-mini
+      - SEACOR_LLM_TEMPERATURE=0.7
+      - SEACOR_LOG_LEVEL=INFO
+      - MONICA_API_KEY=${MONICA_API_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s 
