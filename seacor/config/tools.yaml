@@ -1,0 +1,8 @@
+tools: []
+
+  # ここにBaseTool継承ツールを追加
+  # 例:
+  # - name: web_search
+  #   module: seacor.tools.base_tool
+  #   class: WebSearchTool
+  #   config: {}

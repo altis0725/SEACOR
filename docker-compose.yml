@@ -1,25 +1,21 @@
-version: '3.8'
-
 services:
-  web:
-    build: .
+  seacor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-      - ./data:/app/data
-      - ./logs:/app/logs
-      - ./config:/app/config
+    env_file:
+      - .env
     environment:
-      - SEACOR_LLM_PROVIDER=monica
-      - SEACOR_LLM_MODEL=gpt-4o-mini
-      - SEACOR_LLM_TEMPERATURE=0.7
-      - SEACOR_LOG_LEVEL=INFO
+      - SEACOR_LOG_LEVEL=${SEACOR_LOG_LEVEL}
       - MONICA_API_KEY=${MONICA_API_KEY}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s 
+      start_period: 40s
