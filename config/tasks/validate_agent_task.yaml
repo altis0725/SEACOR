@@ -1,0 +1,8 @@
+MetaTask:
+  validate_agent_task:
+    id: validate_agent_task
+    description: |
+      新しいエージェント定義が既存のエージェントと重複・類似していないか、意味的な観点も含めて判定し、重複していれば理由も説明してください。
+    agent: validation_agent
+    expected_output: |
+      is_duplicate, reason などのJSON形式 

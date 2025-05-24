@@ -1,0 +1,11 @@
+MetaTask:
+  flow_review_task:
+    id: flow_review_task
+    description: |
+      クルーやフローの構成をレビューし、改善案を出してください。
+      ・問題点の指摘
+      ・改善案や最適化案の提案
+      出力例: problems, suggestions などのJSON形式
+    agent: flow_reviewer_agent
+    expected_output: |
+      problems, suggestions などのJSON形式 

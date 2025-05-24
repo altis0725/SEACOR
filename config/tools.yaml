@@ -1,0 +1,9 @@
+monica_llm:
+  type: llm
+  provider: monicaai
+  description: MonicaAI LLM（大規模言語モデル）APIツール
+  api_key_env: MONICA_API_KEY
+  endpoint: https://openapi.monica.im/v1/chat/completions
+  model: gpt-4o-mini
+  temperature: 0.7
+  max_tokens: 2000 

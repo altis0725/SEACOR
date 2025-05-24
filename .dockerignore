@@ -36,7 +36,6 @@ ENV/
 *.swo
 
 # ログとキャッシュ
-logs/
 .cache/
 *.log
 

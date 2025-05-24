@@ -1,0 +1,16 @@
+MetaCrew:
+  name: evolution_crew
+  description: クルーやエージェントの進化・拡張案を生成するクルー
+  agents:
+    - evolution_agent
+  tasks:
+    - evolution_task
+  process: sequential
+  manager_agent: evolution_agent
+  output_log_file: logs/evolution_crew.json
+  memory:
+    type: file
+    path: memory/evolution_crew.json
+  callback:
+    - core/self_assessor.py
+  verbose: true 

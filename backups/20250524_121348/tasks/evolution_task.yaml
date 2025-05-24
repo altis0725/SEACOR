@@ -1,0 +1,12 @@
+MetaTask:
+  evolution_task:
+    id: evolution_task
+    description: |
+      クルーやエージェントの進化案を提案してください。
+      ・不足しているエージェントやタスクの追加
+      ・類似エージェントの統合や不要エージェントの削除
+      ・タスクやフローの最適化
+      出力例: {"new_agents": [...], "remove_agents": ["agent_id1", ...], "merge_agents": [{"from": ["agent_id2", "agent_id3"], "to": "merged_agent_id", "definition": {...}}], ...}
+    agent: evolution_agent
+    expected_output: |
+      {"new_agents": [...], "remove_agents": [...], "merge_agents": [...], ...} 

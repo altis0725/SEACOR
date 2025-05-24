@@ -1,0 +1,21 @@
+MetaCrew:
+  name: main_crew
+  description: メインの業務遂行クルー。main_agentとfeedback_agentで構成され、各タスクを並列実行し、出力をfeedback_agentが評価・修正し、main_agentが最終回答を作成する。
+  agents:
+    - main_agent
+    - feedback_agent
+  tasks:
+    - main_task
+    - feedback_task
+    - revise_task
+  process: sequential
+  manager_agent: main_agent
+  feedback_agent: feedback_agent
+  output_log_file: logs/meta_crew.json
+  memory:
+    type: file
+    path: memory/main_crew.json
+  kickoff_async: true
+  callback:
+    - core/self_assessor.py
+  verbose: true

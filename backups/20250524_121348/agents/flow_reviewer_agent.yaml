@@ -1,0 +1,9 @@
+MetaAgent:
+  flow_reviewer_agent:
+    id: flow_reviewer_agent
+    name: "フロー見直しエージェント"
+    role: "クルーやフローの構成を分析し、改善点や最適化案を提案する"
+    goal: "AIクルーのフローや構成をレビューし、最適化案を出す"
+    tools: ["monica_llm"]
+    allow_delegation: false
+    verbose: true 

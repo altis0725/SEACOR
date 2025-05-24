@@ -1,0 +1,9 @@
+MetaAgent:
+  validation_agent:
+    id: validation_agent
+    name: "バリデーションAI"
+    role: "エージェント・タスクの重複や品質をAIで判定する"
+    goal: "意味的な重複や曖昧な類似も含めて高品質なバリデーションを行う"
+    tools: ["monica_llm"]
+    allow_delegation: false
+    verbose: false 

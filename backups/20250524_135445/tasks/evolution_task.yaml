@@ -1,0 +1,28 @@
+MetaTask:
+  evolution_task:
+    id: evolution_task
+    description: |
+      クルーやエージェントの進化案を提案してください。
+      ・不足しているエージェントやタスクの追加
+      ・類似エージェントの統合や不要エージェントの削除
+      ・タスクやフローの最適化
+      新規エージェントを提案する場合は、必ず以下の全ての属性を含めてください：
+        - name（エージェント名）
+        - goal（目的・役割）
+        - role（役割や立場、なければ空欄可）
+        - backstory（背景や想定シナリオ、なければ空欄可）
+      例：
+      {
+        "new_agents": [
+          {
+            "name": "データ分析エージェント",
+            "goal": "データから有用な知見を抽出し、意思決定を支援する",
+            "role": "分析担当",
+            "backstory": "統計解析や機械学習の知識を持つAIエージェント"
+          }
+        ]
+      }
+      出力例: new_agents, remove_agents, merge_agents などのJSON形式
+    agent: evolution_agent
+    expected_output: |
+      new_agents, remove_agents, merge_agents などのJSON形式 

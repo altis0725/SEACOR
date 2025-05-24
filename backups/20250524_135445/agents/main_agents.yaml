@@ -1,0 +1,60 @@
+evolution_agent:
+  allow_delegation: false
+  goal: 全体のプロンプトと出力を比較し、必要なagentやflowの見直しを提案する
+  name: EvolutionAgent
+  role: 進化
+  tools:
+  - monica_llm
+  verbose: true
+evolution_director:
+  allow_delegation: true
+  backstory: SEACORシステムの進化を担当し、継続的な改善と適応を促進します。
+  goal: システムの進化方向を決定し、強化プロセスを管理する
+  name: EvolutionDirector
+  role: 進化責任者
+  tools:
+  - monica_llm
+  verbose: true
+feedback_agent:
+  allow_delegation: false
+  goal: 入力と出力を比較し、出力が正しいか評価・修正案を出す
+  name: FeedbackAgent
+  role: フィードバック
+  tools:
+  - monica_llm
+  verbose: true
+main_agent:
+  allow_delegation: false
+  goal: ユーザーのプロンプトに対して最適な回答を生成する
+  name: MainAgent
+  role: メイン
+  tools:
+  - monica_llm
+  verbose: true
+meta_coordinator:
+  allow_delegation: true
+  backstory: 私はSEACORシステムの全体調整を担当し、複雑な問題解決プロセスを管理します。
+  goal: 全体プロセスを効率的に管理し、リソースを最適に割り当てる
+  name: MetaCoordinator
+  role: 調整者
+  tools:
+  - monica_llm
+  verbose: true
+performance_analyst:
+  allow_delegation: false
+  backstory: SEACORの性能分析を担当し、システムの効率と効果を継続的に評価します。
+  goal: 実行結果と効率性を分析し、改善点を特定する
+  name: PerformanceAnalyst
+  role: 性能分析者
+  tools:
+  - monica_llm
+  verbose: true
+strategy_architect:
+  allow_delegation: true
+  backstory: 問題分析と戦略設計のスペシャリスト。最適な思考アプローチを構築します。
+  goal: 問題に対する最適な思考戦略を設計する
+  name: StrategyArchitect
+  role: 戦略設計者
+  tools:
+  - monica_llm
+  verbose: true
