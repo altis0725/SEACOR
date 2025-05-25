@@ -5,4 +5,18 @@ MetaTask:
       新しいエージェント定義が既存のエージェントと重複・類似していないか、意味的な観点も含めて判定し、重複していれば理由も説明してください。
     agent: validation_agent
     expected_output: |
-      is_duplicate, reason などのJSON形式 
+      is_duplicate, reason などのJSON形式
+  feedback_task:
+    id: feedback_task
+    description: |
+      入力と出力を比較し、バリデーション結果の正しさを評価・修正案を出す
+    agent: feedback_agent
+    expected_output: |
+      評価・修正案
+  revise_task:
+    id: revise_task
+    description: |
+      フィードバックagentの評価・修正案を受けて、最終的な最適バリデーション結果を作成してください。
+    agent: validation_agent
+    expected_output: |
+      フィードバックを反映した最終バリデーション結果 

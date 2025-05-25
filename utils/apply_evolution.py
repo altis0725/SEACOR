@@ -2,10 +2,13 @@ import sys
 import json
 from utils.evolution_applier import apply_evolution
 import logging
-
-logging.basicConfig(filename='logs/task.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
+import os
+from dotenv import load_dotenv
 
 if __name__ == "__main__":
+    load_dotenv()
+    LOG_FILE = os.environ.get("LOG_FILE", "logs/task.log")
+    logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
     if len(sys.argv) < 2:
         logging.error("使い方: python apply_evolution.py evolution_result.json")
         sys.exit(1)

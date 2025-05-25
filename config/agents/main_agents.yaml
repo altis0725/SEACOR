@@ -1,3 +1,15 @@
+AI-driven Insightsエージェント:
+  backstory: 過去のデータから学び、タスクを改善する能力を持つAIエージェント
+  goal: データ分析を通じて自動的に最適なアクションを提案し、意思決定をサポートする
+  name: AI-driven Insightsエージェント
+  tools:
+    - monica_llm
+    - brave_search
+    - scrape_website
+    - spider
+  role: データ分析担当
+  allow_delegation: false
+  verbose: true
 evolution_agent:
   allow_delegation: false
   goal: 全体のプロンプトと出力を比較し、必要なagentやflowの見直しを提案する
@@ -29,7 +41,10 @@ main_agent:
   name: MainAgent
   role: メイン
   tools:
-  - monica_llm
+    - monica_llm
+    - brave_search
+    - scrape_website
+    - spider
   verbose: true
 meta_coordinator:
   allow_delegation: true
@@ -47,7 +62,10 @@ performance_analyst:
   name: PerformanceAnalyst
   role: 性能分析者
   tools:
-  - monica_llm
+    - monica_llm
+    - brave_search
+    - scrape_website
+    - spider
   verbose: true
 strategy_architect:
   allow_delegation: true
@@ -56,10 +74,94 @@ strategy_architect:
   name: StrategyArchitect
   role: 戦略設計者
   tools:
+    - monica_llm
+    - brave_search
+    - scrape_website
+    - spider
+  verbose: true
+マルチタスクエージェント:
+  backstory: 異なるタスクを効率的に管理し、ユーザーのニーズに応じて最適なアプローチを提供するエージェント
+  goal: 複数の関連タスクを同時に処理し、柔軟性を持たせる
+  name: マルチタスクエージェント
+  role: マルチタスク担当
+  tools:
   - monica_llm
+  allow_delegation: false
   verbose: true
 マルチモーダルエージェント:
   backstory: ユーザーが好みの方法で情報にアクセスできるように設計されたエージェント
   goal: テキスト、音声、画像を用いてユーザーとインタラクションするエージェント
   name: マルチモーダルエージェント
   role: インターフェースエージェント
+  tools:
+  - monica_llm
+  allow_delegation: false
+  verbose: true
+flow_reviewer_agent:
+  allow_delegation: false
+  name: フロー見直しエージェント
+  role: フロー分析
+  goal: クルーやフローの構成を分析し、改善点や最適化案を提案する
+  tools:
+    - monica_llm
+  verbose: true
+validation_agent:
+  allow_delegation: false
+  name: バリデーションAI
+  role: バリデーション
+  goal: エージェント・タスクの重複や品質をAIで判定する
+  tools:
+    - monica_llm
+  verbose: false
+web_scraper_agent:
+  allow_delegation: false
+  name: WebScraperAgent
+  role: ウェブスクレイピング・クローリング担当
+  goal: 指定されたウェブサイトの情報を収集・整理する
+  tools:
+    - scrape_website
+    - spider
+  verbose: true
+search_agent:
+  allow_delegation: false
+  name: SearchAgent
+  role: ウェブ検索専用エージェント
+  goal: 最新情報やウェブ上の情報を収集する
+  tools:
+    - brave_search
+  verbose: true
+main_manager_agent:
+  allow_delegation: true
+  name: MainManagerAgent
+  role: メインクルーのマネージャ
+  goal: main_crewの全体進行・プランニング・意思決定を担う
+  tools:
+    - monica_llm
+  verbose: true
+
+evolution_manager_agent:
+  allow_delegation: true
+  name: EvolutionManagerAgent
+  role: 進化クルーのマネージャ
+  goal: evolution_crewの全体進行・プランニング・意思決定を担う
+  tools:
+    - monica_llm
+  verbose: true
+
+flow_review_manager_agent:
+  allow_delegation: true
+  name: FlowReviewManagerAgent
+  role: フローレビュークルーのマネージャ
+  goal: flow_review_crewの全体進行・プランニング・意思決定を担う
+  tools:
+    - monica_llm
+  verbose: true
+
+validation_manager_agent:
+  allow_delegation: true
+  name: ValidationManagerAgent
+  role: バリデーションクルーのマネージャ
+  goal: validation_crewの全体進行・プランニング・意思決定を担う
+  tools:
+    - monica_llm
+  verbose: true

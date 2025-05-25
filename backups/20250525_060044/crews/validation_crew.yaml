@@ -1,0 +1,14 @@
+MetaCrew:
+  name: validation_crew
+  description: エージェント・タスクのAIバリデーションを行うクルー
+  agents:
+    - validation_agent
+  tasks:
+    - validate_agent_task
+  process: sequential
+  manager_agent: validation_agent
+  output_log_file: logs/validation_crew.json
+  memory:
+    type: file
+    path: memory/validation_crew.json
+  verbose: true 

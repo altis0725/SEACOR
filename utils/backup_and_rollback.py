@@ -11,8 +11,6 @@ CONFIG_DIRS = [
     ("config/tasks", "tasks"),
 ]
 
-logging.basicConfig(filename='logs/task.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
-
 def backup_configs():
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     backup_dir = os.path.join(BACKUP_ROOT, timestamp)

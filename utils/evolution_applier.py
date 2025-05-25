@@ -2,14 +2,11 @@ import os
 import yaml
 import json
 from utils.backup_and_rollback import backup_configs
-import logging
 
 AGENTS_PATH = "config/agents/main_agents.yaml"
 CREWS_DIR = "config/crews"
 
 REQUIRED_AGENT_FIELDS = ["name", "goal", "role", "backstory"]
-
-logging.basicConfig(filename='logs/task.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 def load_yaml(path):
     with open(path, encoding="utf-8") as f:
@@ -36,9 +33,9 @@ def apply_evolution(evo: dict):
             if key:
                 agents[key] = agent
             else:
-                logging.warning(f"[警告] agent定義にid/nameがありません: {agent}")
+                print(f"[警告] agent定義にid/nameがありません: {agent}")
         elif isinstance(agent, str):
-            logging.warning(f"[警告] agent定義が不完全: {agent}")
+            print(f"[警告] agent定義が不完全: {agent}")
     # 4. agent削除
     remove_agents = evo.get("remove_agents", [])
     for agent in remove_agents:
@@ -67,14 +64,14 @@ def apply_evolution(evo: dict):
         if isinstance(crew, dict):
             crew_name = crew.get("name")
             if not crew_name:
-                logging.warning(f"[警告] crew修正定義にnameがありません: {crew}")
+                print(f"[警告] crew修正定義にnameがありません: {crew}")
                 continue
             path = os.path.join(CREWS_DIR, f"{crew_name}.yaml")
             if os.path.exists(path):
                 save_yaml(path, {"MetaCrew": crew})
-                logging.info(f"クルー修正: {crew_name}")
+                print(f"クルー修正: {crew_name}")
             else:
-                logging.warning(f"[警告] crewファイルが存在しません（修正スキップ）: {path}")
+                print(f"[警告] crewファイルが存在しません（修正スキップ）: {path}")
         else:
-            logging.warning(f"[警告] crew修正定義が不完全: {crew}")
-    logging.info(f"進化案を適用しました（YAML自動編集・クルー/フロー修正のみ）") 
+            print(f"[警告] crew修正定義が不完全: {crew}")
+    print(f"進化案を適用しました（YAML自動編集・クルー/フロー修正のみ）") 

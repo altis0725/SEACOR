@@ -1,12 +1,18 @@
 MetaCrew:
   name: flow_review_crew
-  description: クルーやフロー全体の見直し・最適化を行うクルー
+  description: クルーやフロー全体の見直し・最適化を行い、必ず出力内容を自動チェック・改善する
   agents:
     - flow_reviewer_agent
+    - feedback_agent
+    - flow_review_manager_agent
   tasks:
     - flow_review_task
+    - feedback_task
+    - revise_task
   process: sequential
-  manager_agent: flow_reviewer_agent
+  manager_agent: flow_review_manager_agent
+  planning: true
+  planning_llm: monica_llm
   output_log_file: logs/flow_review_crew.json
   memory:
     type: file

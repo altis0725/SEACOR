@@ -1,5 +1,7 @@
 import os
 import json
+import inspect
+import logging
 from crewai import Agent, Task, Crew, Process
 from utils.yaml_loader import load_agents, load_tasks, load_crews, load_tools, reencode_json_to_utf8
 from tools.monica_llm import MonicaLLM
@@ -25,8 +27,29 @@ monica_llm = MonicaLLM(
     max_tokens=monica_conf.get("max_tokens", 2000)
 )
 
+def ensure_str(val):
+    """
+    valがdict型ならdescriptionフィールドを抽出、str型でなければstr()で変換。
+    dict型やstr型以外が混入した場合は詳細なエラーログを出力。
+    """
+    if isinstance(val, dict):
+        if "description" in val:
+            return val["description"]
+        else:
+            caller = inspect.stack()[1]
+            logging.error(f"[ensure_str] dict型だがdescriptionフィールドなし: value={val}, 呼び出し元={caller.filename}:{caller.lineno}")
+            return str(val)
+    elif not isinstance(val, str):
+        caller = inspect.stack()[1]
+        logging.error(f"[ensure_str] 想定外の型: type={type(val)}, value={val}, 呼び出し元={caller.filename}:{caller.lineno}")
+        return str(val)
+    return val
+
 def pre_task_description_hook(crew_name, task_id, prompt=None, main_task_output=None, system_message=None):
-    desc = tasks_yaml[task_id]["description"]
+    desc = ensure_str(tasks_yaml[task_id]["description"])
+    prompt = ensure_str(prompt) if prompt is not None else None
+    main_task_output = ensure_str(main_task_output) if main_task_output is not None else None
+    system_message = ensure_str(system_message) if system_message is not None else None
     # 利用可能なActionリストをtools.yamlのキー名で自動埋め込み
     action_names = list(tools_yaml.keys())
     action_list_str = "\n- " + "\n- ".join(action_names)
@@ -75,6 +98,9 @@ class BaseCrewBuilder:
         )
 
     def build_task(self, task_id, prompt=None, main_task_output=None, system_message=None, crew_name=None):
+        prompt = ensure_str(prompt) if prompt is not None else None
+        main_task_output = ensure_str(main_task_output) if main_task_output is not None else None
+        system_message = ensure_str(system_message) if system_message is not None else None
         desc = pre_task_description_hook(crew_name, task_id, prompt, main_task_output, system_message)
         conf = tasks_yaml[task_id]
         return CustomTask(
@@ -85,6 +111,8 @@ class BaseCrewBuilder:
         )
 
     def build_crew(self, crew_name, prompt=None, system_message=None):
+        prompt = ensure_str(prompt) if prompt is not None else None
+        system_message = ensure_str(system_message) if system_message is not None else None
         conf = crews_yaml[crew_name]
         manager_agent_id = conf["manager_agent"]
         manager_agent = self.build_agent(manager_agent_id, no_tools=True)
@@ -103,11 +131,15 @@ class BaseCrewBuilder:
             manager_agent=manager_agent,
             verbose=conf.get("verbose", False),
             output_log_file=conf.get("output_log_file"),
-            memory_config=conf.get("memory")
+            memory_config=conf.get("memory"),
+            planning=conf.get("planning", False),
+            planning_llm=monica_llm if conf.get("planning_llm") == "monica_llm" else None
         )
 
 class MainCrewBuilder(BaseCrewBuilder):
     def build_crew(self, crew_name, prompt=None, system_message=None):
+        prompt = ensure_str(prompt) if prompt is not None else None
+        system_message = ensure_str(system_message) if system_message is not None else None
         conf = crews_yaml[crew_name]
         manager_agent_id = conf["manager_agent"]
         manager_agent = self.build_agent(manager_agent_id, no_tools=True)
@@ -132,7 +164,9 @@ class MainCrewBuilder(BaseCrewBuilder):
             manager_agent=manager_agent,
             verbose=conf.get("verbose", False),
             output_log_file=conf.get("output_log_file"),
-            memory_config=conf.get("memory")
+            memory_config=conf.get("memory"),
+            planning=conf.get("planning", False),
+            planning_llm=monica_llm if conf.get("planning_llm") == "monica_llm" else None
         )
 
 def get_crew_builder(crew_name):

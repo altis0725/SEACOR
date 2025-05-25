@@ -8,4 +8,18 @@ MetaTask:
       出力例: problems, suggestions などのJSON形式
     agent: flow_reviewer_agent
     expected_output: |
-      problems, suggestions などのJSON形式 
+      problems, suggestions などのJSON形式
+  feedback_task:
+    id: feedback_task
+    description: |
+      入力と出力を比較し、フロー改善案の正しさを評価・修正案を出す
+    agent: feedback_agent
+    expected_output: |
+      評価・修正案
+  revise_task:
+    id: revise_task
+    description: |
+      フィードバックagentの評価・修正案を受けて、最終的な最適フロー改善案を作成してください。
+    agent: flow_reviewer_agent
+    expected_output: |
+      フィードバックを反映した最終フロー改善案 

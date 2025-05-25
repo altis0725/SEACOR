@@ -25,18 +25,4 @@ MetaTask:
       出力例: new_agents, remove_agents, merge_agents などのJSON形式
     agent: evolution_agent
     expected_output: |
-      new_agents, remove_agents, merge_agents などのJSON形式
-  feedback_task:
-    id: feedback_task
-    description: |
-      入力と出力を比較し、進化案の正しさを評価・修正案を出す
-    agent: feedback_agent
-    expected_output: |
-      評価・修正案
-  revise_task:
-    id: revise_task
-    description: |
-      フィードバックagentの評価・修正案を受けて、最終的な最適進化案を作成してください。
-    agent: evolution_agent
-    expected_output: |
-      フィードバックを反映した最終進化案 
+      new_agents, remove_agents, merge_agents などのJSON形式 

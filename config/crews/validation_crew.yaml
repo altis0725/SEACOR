@@ -1,12 +1,18 @@
 MetaCrew:
   name: validation_crew
-  description: エージェント・タスクのAIバリデーションを行うクルー
+  description: エージェント・タスクのAIバリデーションを行い、必ず出力内容を自動チェック・改善する
   agents:
     - validation_agent
+    - feedback_agent
+    - validation_manager_agent
   tasks:
     - validate_agent_task
+    - feedback_task
+    - revise_task
   process: sequential
-  manager_agent: validation_agent
+  manager_agent: validation_manager_agent
+  planning: true
+  planning_llm: monica_llm
   output_log_file: logs/validation_crew.json
   memory:
     type: file

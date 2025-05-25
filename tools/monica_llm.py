@@ -6,11 +6,9 @@ import json
 import logging
 from pydantic import BaseModel, Field
 
-logging.basicConfig(filename='logs/task.log', level=logging.INFO, format='%(asctime)s %(levelname)s %(name)s %(message)s')
-
 class MonicaLLMSchema(BaseModel):
-    query: str | dict = Field(..., description="ユーザーからの入力")
-    system_message: str | None = Field(default=None, description="システムメッセージ")
+    query: str = Field(..., description="ユーザーからの入力")
+    system_message: Optional[str] = Field(default=None, description="システムメッセージ")
 
 class MonicaLLM(BaseTool):
     name: str = "Monica LLM"
@@ -30,12 +28,11 @@ class MonicaLLM(BaseTool):
         self.temperature = temperature if temperature is not None else self.temperature
         self.max_tokens = max_tokens if max_tokens is not None else self.max_tokens
 
-    def _run(self, query: str | dict = "", system_message: str | None = None):
-        # dict型ならdescriptionだけ抽出
-        if isinstance(query, dict):
-            query = query.get("description", str(query))
-        if isinstance(system_message, dict):
-            system_message = system_message.get("description", str(system_message))
+    def _run(self, query: str = "", system_message: Optional[str] = None):
+        if not isinstance(query, str):
+            raise TypeError(f"MonicaLLM._run: queryはstr型であるべきですが、{type(query)}型です")
+        if system_message is not None and not isinstance(system_message, str):
+            raise TypeError(f"MonicaLLM._run: system_messageはstr型またはNoneであるべきですが、{type(system_message)}型です")
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}"
@@ -50,7 +47,6 @@ class MonicaLLM(BaseTool):
             "temperature": self.temperature,
             "max_tokens": self.max_tokens
         }
-        # デバッグ用: 実際にMonicaAIに渡す内容を出力
         logging.info("=== MonicaAI APIリクエスト ===")
         logging.info(f"endpoint: {self.endpoint}")
         logging.info(f"headers: {headers}")

@@ -4,15 +4,13 @@ MetaCrew:
   agents:
     - main_agent
     - feedback_agent
-    - main_manager_agent
   tasks:
     - main_task
     - feedback_task
     - revise_task
   process: sequential
-  manager_agent: main_manager_agent
-  planning: true
-  planning_llm: monica_llm
+  manager_agent: main_agent
+  feedback_agent: feedback_agent
   output_log_file: logs/meta_crew.json
   memory:
     type: file

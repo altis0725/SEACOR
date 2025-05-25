@@ -11,9 +11,9 @@ feedback_task:
   human_input: false
 
 revise_task:
-  description: フィードバックagentの評価・修正案を受けて、最終的な最適回答や出力を作成してください。
+  description: フィードバックagentの評価・修正案を受けて、ユーザーの質問に対する最終的な最適回答を作成してください。
   agent: main_agent
-  expected_output: 明確で実用的かつフィードバックを反映した最終回答や出力
+  expected_output: 明確で実用的かつフィードバックを反映した最終回答
   human_input: false
 
 evolution_task:

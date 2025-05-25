@@ -6,14 +6,16 @@ import os
 import logging
 import json
 import re
+from dotenv import load_dotenv
 
 from crews.generic_crew import kickoff_async_crew
 from utils.yaml_loader import reencode_json_to_utf8
 from utils.evolution_applier import apply_evolution
 
-# ログ設定（アプリ全体で一度だけ）
+load_dotenv()
+LOG_FILE = os.environ.get("LOG_FILE", "logs/task.log")
 logging.basicConfig(
-    filename='logs/task.log',
+    filename=LOG_FILE,
     level=logging.INFO,
     format='%(asctime)s %(levelname)s %(name)s %(message)s'
 )
