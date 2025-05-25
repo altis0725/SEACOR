@@ -1,11 +1,11 @@
-# SEACOR: FastAPI × crewAI × MonicaAI (OpenAI互換) 日本語AIシステム
+# SEACOR: FastAPI × crewAI × MonicaAI 日本語AIシステム
 
 ## 概要
 
-SEACORは、FastAPI・crewAI・MonicaAI(OpenAI互換API)を組み合わせた、  
+SEACORは、FastAPI・crewAI・MonicaAI(OpenAI互換API)を組み合わせた  
 **日本語対応・自己進化型AIエージェントシステム**です。  
-YAMLでエージェント・タスク・クルーを柔軟に定義し、  
-Web UI/REST API経由でOpenAI互換のチャット体験を提供します。
+YAMLでエージェント・タスク・クルー・ツールを柔軟に定義し、  
+Web UI/REST API経由でOpenAI互換のチャット体験と自律的なAIワークフローを提供します。
 
 ---
 
@@ -13,7 +13,8 @@ Web UI/REST API経由でOpenAI互換のチャット体験を提供します。
 
 - **OpenAI互換API**（/v1/chat/completions）でMonicaAIを利用
 - **日本語YAML設定**＆日本語Web UI
-- **自己進化・自動フィードバック**（crewAIクルー構成）
+- **自己進化・自動フィードバック・自動プランニング**（各crewでplanning有効化）
+- **Web検索・スクレイピング・クローリング**など多様な外部ツール連携
 - **Docker/Docker Compose対応**で簡単デプロイ
 - **ログ・進化履歴・自動バックアップ**機能
 
@@ -35,10 +36,10 @@ Web UI/REST API経由でOpenAI互換のチャット体験を提供します。
 │   └── tools.yaml
 ├── crews/                 # crewAIクルー実装
 ├── core/                  # エージェント生成・進化・バリデーション等
-├── tools/                 # MonicaAI LLMツール実装
-├── utils/                 # ユーティリティ（YAML再エンコード等）
+├── tools/                 # MonicaAI LLM・Webツール実装
+├── utils/                 # ユーティリティ
 ├── logs/                  # 実行ログ・進化履歴
-└── .env                   # 環境変数（APIキー等、手動作成）
+└── .env                   # 環境変数（APIキー等、手動作成・git管理外）
 ```
 
 ---
@@ -102,7 +103,25 @@ monica_llm:
   endpoint: https://openapi.monica.im/v1/chat/completions
   model: gpt-4o-mini
   temperature: 0.7
-  max_tokens: 2000 
+  max_tokens: 2000
+
+brave_search:
+  type: tool
+  provider: crewai_tools
+  class: BraveSearchTool
+  description: Brave Search APIを利用してウェブ検索を行うツール
+
+scrape_website:
+  type: tool
+  provider: crewai_tools
+  class: ScrapeWebsiteTool
+  description: ウェブサイトの内容をスクレイピングして取得するツール
+
+spider:
+  type: tool
+  provider: crewai_tools
+  class: SpiderTool
+  description: 指定したURLからリンクをたどってクロール・情報収集するツール
 ```
 
 ### config/agents/main_agents.yaml
@@ -115,19 +134,11 @@ main_agent:
   role: メイン
   tools:
     - monica_llm
+    - brave_search
+    - scrape_website
+    - spider
   verbose: true
 # ...他エージェントも同様
-```
-
-### config/tasks/main_tasks.yaml
-
-```yaml
-main_task:
-  description: ユーザーの質問に対して最適な回答を生成する
-  agent: main_agent
-  expected_output: 明確で実用的な回答
-  human_input: false
-# ...他タスクも同様
 ```
 
 ### config/crews/main_crew.yaml
@@ -135,17 +146,19 @@ main_task:
 ```yaml
 MetaCrew:
   name: main_crew
-  description: メインの業務遂行クルー。main_agentとfeedback_agentで構成
+  description: メインの業務遂行クルー
   agents:
     - main_agent
     - feedback_agent
+    - main_manager_agent
   tasks:
     - main_task
     - feedback_task
     - revise_task
   process: sequential
-  manager_agent: main_agent
-  feedback_agent: feedback_agent
+  manager_agent: main_manager_agent
+  planning: true
+  planning_llm: monica_llm
   output_log_file: logs/meta_crew.json
   memory:
     type: file
@@ -186,7 +199,7 @@ MetaCrew:
 
 ## ライセンス
 
-本リポジトリはMITライセンスです。
+MITライセンス
 
 ---
 
