@@ -3,3 +3,4 @@ __pycache__/
 evolution_log.jsonl
 logs/
 .env 
+.vscode/

@@ -13,23 +13,17 @@ class AgentGenerator:
         self.tasks_yaml_path = tasks_yaml_path
         self.crews_yaml_path = crews_yaml_path
 
-    def _load_yaml(self, path, wrap_key=None):
+    def _load_yaml(self, path):
         with open(path, encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-            if wrap_key and wrap_key in data:
-                return data[wrap_key]
-            return data
+            return yaml.safe_load(f)
 
-    def _save_yaml(self, path, data, wrap_key=None):
+    def _save_yaml(self, path, data):
         with open(path, "w", encoding="utf-8") as f:
-            if wrap_key:
-                yaml.safe_dump({wrap_key: data}, f, allow_unicode=True)
-            else:
-                yaml.safe_dump(data, f, allow_unicode=True)
+            yaml.safe_dump(data, f, allow_unicode=True)
 
     def add_agents(self, new_agents: List[Dict[str, Any]]):
-        agents = self._load_yaml(self.agents_yaml_path, wrap_key="MetaAgent")
-        validator = YAMLValidator(agents, self._load_yaml(self.tasks_yaml_path, wrap_key="MetaTask"))
+        agents = self._load_yaml(self.agents_yaml_path)
+        validator = YAMLValidator(agents, self._load_yaml(self.tasks_yaml_path))
         valid_agents = []
         for agent in new_agents:
             if validator.validate_agent(agent):
@@ -41,18 +35,18 @@ class AgentGenerator:
             return
         for agent in valid_agents:
             agents[agent["id"]] = agent
-        self._save_yaml(self.agents_yaml_path, agents, wrap_key="MetaAgent")
+        self._save_yaml(self.agents_yaml_path, agents)
 
     def remove_agents(self, remove_agent_ids: List[str]):
-        agents = self._load_yaml(self.agents_yaml_path, wrap_key="MetaAgent")
+        agents = self._load_yaml(self.agents_yaml_path)
         for agent_id in remove_agent_ids:
             if agent_id in agents:
                 del agents[agent_id]
                 logging.info(f"エージェント削除: {agent_id}")
-        self._save_yaml(self.agents_yaml_path, agents, wrap_key="MetaAgent")
+        self._save_yaml(self.agents_yaml_path, agents)
 
     def merge_agents(self, merge_instructions: List[Dict[str, Any]]):
-        agents = self._load_yaml(self.agents_yaml_path, wrap_key="MetaAgent")
+        agents = self._load_yaml(self.agents_yaml_path)
         for merge in merge_instructions:
             from_ids = merge.get("from", [])
             to_id = merge.get("to")
@@ -65,11 +59,11 @@ class AgentGenerator:
             if to_id and definition:
                 agents[to_id] = definition
                 logging.info(f"エージェント新規統合定義: {to_id}")
-        self._save_yaml(self.agents_yaml_path, agents, wrap_key="MetaAgent")
+        self._save_yaml(self.agents_yaml_path, agents)
 
     def add_tasks(self, new_tasks: List[Dict[str, Any]]):
-        tasks = self._load_yaml(self.tasks_yaml_path, wrap_key="MetaTask")
-        validator = YAMLValidator(self._load_yaml(self.agents_yaml_path, wrap_key="MetaAgent"), tasks)
+        tasks = self._load_yaml(self.tasks_yaml_path)
+        validator = YAMLValidator(self._load_yaml(self.agents_yaml_path), tasks)
         valid_tasks = []
         for task in new_tasks:
             if validator.validate_task(task):
@@ -81,15 +75,15 @@ class AgentGenerator:
             return
         for task in valid_tasks:
             tasks[task["id"]] = task
-        self._save_yaml(self.tasks_yaml_path, tasks, wrap_key="MetaTask")
+        self._save_yaml(self.tasks_yaml_path, tasks)
 
     def update_crew(self, crew_name: str, updates: Dict[str, Any]):
-        crews = self._load_yaml(self.crews_yaml_path, wrap_key="MetaCrew")
+        crews = self._load_yaml(self.crews_yaml_path)
         if crew_name in crews:
             crews[crew_name].update(updates)
         else:
             crews[crew_name] = updates
-        self._save_yaml(self.crews_yaml_path, crews, wrap_key="MetaCrew")
+        self._save_yaml(self.crews_yaml_path, crews)
 
     def validate_yaml(self, path):
         # TODO: pydantic等でスキーマバリデーションを実装

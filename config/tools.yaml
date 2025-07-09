@@ -1,24 +1,14 @@
-monica_llm:
-  type: llm
-  provider: monicaai
-  description: MonicaAI LLM（大規模言語モデル）APIツール
-  api_key_env: MONICA_API_KEY
-  endpoint: https://openapi.monica.im/v1/chat/completions
-  model: gpt-4o-mini
-  temperature: 0.7
-  max_tokens: 2000
-
 scrape_website:
   type: tool
   provider: crewai_tools
   class: ScrapeWebsiteTool
   description: ウェブサイトの内容をスクレイピングして取得するツール
 
-spider:
-  type: tool
-  provider: crewai_tools
-  class: SpiderTool
-  description: 指定したURLからリンクをたどってクロール・情報収集するツール
+# spider:
+#   type: tool
+#   provider: crewai_tools
+#   class: SpiderTool
+#   description: 指定したURLからリンクをたどってクロール・情報収集するツール
 
 brave_search:
   type: tool

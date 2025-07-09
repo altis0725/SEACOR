@@ -28,10 +28,10 @@ class EvolutionTracker:
         event["timestamp"] = datetime.utcnow().isoformat()
         try:
             with FileLock(self.lock_path):
-                with open(self.log_path, encoding="utf-8") as f:
-                    logs = json.load(f)
-                logs.append(event)
-                with open(self.log_path, "w", encoding="utf-8") as f:
-                    json.dump(logs, f, ensure_ascii=False, indent=2)
+        with open(self.log_path, encoding="utf-8") as f:
+            logs = json.load(f)
+        logs.append(event)
+        with open(self.log_path, "w", encoding="utf-8") as f:
+            json.dump(logs, f, ensure_ascii=False, indent=2) 
         except Exception as e:
             logging.error(f"EvolutionTracker record error: {e}, event={event}") 

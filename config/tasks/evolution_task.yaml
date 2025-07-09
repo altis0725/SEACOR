@@ -1,42 +1,35 @@
-MetaTask:
-  evolution_task:
-    id: evolution_task
-    description: |
-      クルーやエージェントの進化案を提案してください。
-      ・不足しているエージェントやタスクの追加
-      ・類似エージェントの統合や不要エージェントの削除
-      ・タスクやフローの最適化
-      新規エージェントを提案する場合は、必ず以下の全ての属性を含めてください：
-        - name（エージェント名）
-        - goal（目的・役割）
-        - role（役割や立場、なければ空欄可）
-        - backstory（背景や想定シナリオ、なければ空欄可）
-      例：
-      {
-        "new_agents": [
-          {
-            "name": "データ分析エージェント",
-            "goal": "データから有用な知見を抽出し、意思決定を支援する",
-            "role": "分析担当",
-            "backstory": "統計解析や機械学習の知識を持つAIエージェント"
-          }
-        ]
-      }
-      出力例: new_agents, remove_agents, merge_agents などのJSON形式
-    agent: evolution_agent
-    expected_output: |
-      new_agents, remove_agents, merge_agents などのJSON形式
-  feedback_task:
-    id: feedback_task
-    description: |
-      入力と出力を比較し、進化案の正しさを評価・修正案を出す
-    agent: feedback_agent
-    expected_output: |
-      評価・修正案
-  revise_task:
-    id: revise_task
-    description: |
-      フィードバックagentの評価・修正案を受けて、最終的な最適進化案を作成してください。
-    agent: evolution_agent
-    expected_output: |
-      フィードバックを反映した最終進化案 
+evolution_task:
+  name: evolution_task
+  description: >
+    システム全体のエージェント・タスク・フローを分析し、現状の課題や改善余地を特定してください。
+    1. 新規エージェントやタスクの追加提案（理由付き）
+    2. 類似・冗長なエージェント/タスクの統合・削除案
+    3. フローや役割分担の最適化案
+    4. 各提案には「name」「goal」「role」「backstory」などの属性を必ず含めてください。
+    ユーザーの質問は以下のとおり。
+    {prompt}
+    生成したアウトプットは以下の通り。
+    {system_message}
+  expected_output: >
+    new_agents, remove_agents, merge_agents などを含む構造化JSON。
+    各エージェント・タスクの詳細属性（name, goal, role, backstory）を明記し、提案理由も記載すること。
+  output_pydantic: utils.evolution_models.EvolutionOutput
+  config: {}
+
+evolution_feedback_task:
+  description: >
+    入力と出力を比較し、出力内容の正確性・妥当性を評価してください。
+    必要に応じて具体的な修正案や改善点も提案すること。
+  expected_output: >
+    出力の正しさ評価・修正案（理由や根拠も明記）
+  human_input: false
+  config: {}
+
+evolution_revise_task:
+  description: >
+    フィードバックtaskの評価・修正案をもとに、最終的に最適化された回答や出力を作成してください。
+    変更点や改善理由も明記すること。
+  expected_output: >
+    明確で実用的かつフィードバックを反映した最終回答・出力（改善理由付き）
+  human_input: false
+  config: {}

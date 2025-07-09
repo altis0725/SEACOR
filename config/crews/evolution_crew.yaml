@@ -1,22 +1,21 @@
-MetaCrew:
+evolution_crew:
   name: evolution_crew
-  description: クルーやエージェントの進化・拡張案を生成し、必ず出力内容を自動チェック・改善する
+  description: クルーやエージェントの進化・拡張案を生成する。
   agents:
     - evolution_agent
     - feedback_agent
     - evolution_manager_agent
   tasks:
     - evolution_task
-    - feedback_task
-    - revise_task
-  process: sequential
+    - evolution_feedback_task
+    - evolution_revise_task
+  process: hierarchical
   manager_agent: evolution_manager_agent
   planning: true
   planning_llm: monica_llm
   output_log_file: logs/evolution_crew.json
-  memory:
-    type: file
-    path: memory/evolution_crew.json
-  callback:
-    - core/self_assessor.py
+  memory: false
+  callback: []
+#    - core/evolution_callback.py
   verbose: true 
+  config: {} 

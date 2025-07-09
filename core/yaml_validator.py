@@ -58,6 +58,7 @@ class YAMLValidator:
         return True
 
     async def validate_agent(self, agent: Dict[str, Any]) -> bool:
+        # 単一YAMLのdict構造に合わせて必須キーを確認
         required = ["id", "name", "role", "goal", "tools"]
         rule_valid = all(k in agent for k in required) and not self.is_duplicate_agent(agent)
         if not rule_valid:

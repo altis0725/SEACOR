@@ -7,11 +7,14 @@ services:
       - ./:/app
     ports:
       - "8000:8000"
+      - "5678:5678"
     env_file:
       - .env
     environment:
       - SEACOR_LOG_LEVEL=${SEACOR_LOG_LEVEL}
       - MONICA_API_KEY=${MONICA_API_KEY}
+      - PYTHONBREAKPOINT=0
+      - PYTHONUNBUFFERED=1
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]

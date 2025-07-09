@@ -1,22 +1,17 @@
-MetaTask:
-  validate_agent_task:
-    id: validate_agent_task
-    description: |
-      新しいエージェント定義が既存のエージェントと重複・類似していないか、意味的な観点も含めて判定し、重複していれば理由も説明してください。
-    agent: validation_agent
-    expected_output: |
-      is_duplicate, reason などのJSON形式
-  feedback_task:
-    id: feedback_task
-    description: |
-      入力と出力を比較し、バリデーション結果の正しさを評価・修正案を出す
-    agent: feedback_agent
-    expected_output: |
-      評価・修正案
-  revise_task:
-    id: revise_task
-    description: |
-      フィードバックagentの評価・修正案を受けて、最終的な最適バリデーション結果を作成してください。
-    agent: validation_agent
-    expected_output: |
-      フィードバックを反映した最終バリデーション結果 
+feedback_task:
+  description: >
+    入力と出力を比較し、出力内容の正確性・妥当性を評価してください。
+    必要に応じて具体的な修正案や改善点も提案すること。
+  expected_output: >
+    出力の正しさ評価・修正案（理由や根拠も明記）
+  human_input: false
+  config: {}
+
+revise_task:
+  description: >
+    フィードバックtaskの評価・修正案をもとに、最終的に最適化された回答や出力を作成してください。
+    変更点や改善理由も明記すること。
+  expected_output: >
+    明確で実用的かつフィードバックを反映した最終回答・出力（改善理由付き）
+  human_input: false
+  config: {}

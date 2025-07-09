@@ -1,41 +1,39 @@
 main_task:
-  description: ユーザーの質問に対して最適な回答を生成する
-  agent: main_agent
-  expected_output: 明確で実用的な回答
+  description: >
+    ユーザーの質問や指示に対し、利用可能なツール・知識・情報源を最大限活用し、
+    論理的根拠とともに最適な回答を生成してください。
+    回答は明確・簡潔・実用的であること。
+    ユーザーの質問は以下のとおり。
+    {prompt}
+  expected_output: >
+    ユーザーにとって最適かつ根拠が明示された回答（必要に応じて箇条書きや構造化形式）
+    なお、outputはinputと同一の言語で出力してください。
   human_input: false
+  config: {}
 
-feedback_task:
-  description: 入力と出力を比較し、出力が正しいか評価・修正案を出す
-  agent: feedback_agent
-  expected_output: 出力の正しさ評価と修正案
+main_feedback_task:
+  description: >
+    入力と出力を比較し、出力内容の正確性・妥当性を評価してください。
+    必要に応じて具体的な修正案や改善点も提案すること。
+  expected_output: >
+    出力の正しさ評価・修正案（理由や根拠も明記）
   human_input: false
+#  async_execution: true
+  config: {}
+  context:
+    - main_task
 
-revise_task:
-  description: フィードバックagentの評価・修正案を受けて、最終的な最適回答や出力を作成してください。
-  agent: main_agent
-  expected_output: 明確で実用的かつフィードバックを反映した最終回答や出力
+main_revise_task:
+  description: >
+    フィードバックtaskの評価・修正案をもとに、最終的に最適化された回答や出力を作成してください。
+    ユーザーの質問は以下のとおり。
+    {prompt}
+  expected_output: >
+    明確で実用的かつフィードバックを反映した最終回答・出力。
+    なお、outputはinputと同一の言語で出力してください。
   human_input: false
-
-evolution_task:
-  description: 全体のプロンプトと出力を比較し、必要なagentやflowの見直しを提案する
-  agent: evolution_agent
-  expected_output: 新たなagentやflowの提案
-  human_input: false
-
-strategy_design_task:
-  description: 与えられた問題に対する最適な思考戦略を設計する
-  agent: strategy_architect
-  expected_output: 詳細な思考戦略計画と実行ステップ
-  human_input: false
-
-performance_analysis_task:
-  description: 実行結果と効率性を分析し、改善点を特定する
-  agent: performance_analyst
-  expected_output: 分析レポートと改善提案
-  human_input: false
-
-evolution_management_task:
-  description: システム進化の方向性を決定し、強化プロセスを管理する
-  agent: evolution_director
-  expected_output: 進化計画と実施レポート
-  human_input: false 
+#  async_execution: true
+  config: {}
+#  context:
+#    - main_task
+#    - main_feedback_task
